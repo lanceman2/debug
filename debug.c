@@ -56,5 +56,5 @@ void xxx_catchSigFault(void)
     memset(&s, 0, sizeof(s));
     s.sa_handler = segSaultCatcher;
     s.sa_flags = SA_RESETHAND;
-    ASSERT(0 == sigaction(SIGSEGV, &s, 0));
+    ASSERT(0 == sigaction(SIGSEGV, &s, 0), "");
 }

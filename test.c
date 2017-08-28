@@ -10,8 +10,10 @@ int main(void)
     DSPEW();
     DSPEW();
 
-    ASSERT(1);
-    VASSERT(0, "test %d\n", 55);
+    ASSERT(1, "");
+    ASSERT(2, "test %d\n", 55);
+
+    FAIL("");
 
     return 0;
 }

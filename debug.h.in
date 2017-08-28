@@ -78,19 +78,10 @@ extern void xxx_catchSigFault(void);
 #  define SPEW(fmt, ...)\
      _SPEW("SPEW: ", fmt, ##__VA_ARGS__)
 
-#  define ASSERT(val) \
+#  define ASSERT(val, fmt, ...) \
     do {\
         if(!((bool) val)) {\
-                _SPEW("ERROR: ", "ASSERTION(%s) failed\n", #val);\
-                xxx_assertAction();\
-        }\
-    }\
-    while(0)
-
-#  define VASSERT(val, fmt, ...) \
-    do {\
-        if(!((bool) val)) {\
-            _SPEW("ERROR: ", "ASSERTION(%s) failed: " #fmt, #val, ##__VA_ARGS__);\
+            _SPEW("ASSERTION", "(%s) failed: " #fmt, #val, ##__VA_ARGS__);\
             xxx_assertAction();\
         }\
     }\
@@ -142,11 +133,9 @@ extern void xxx_catchSigFault(void);
 
 
 #ifdef DEBUG
-#  define DASSERT(x)            ASSERT(val)
-#  define DVASSERT(x, fmt, ...) VASSERT(val, fmt, ##__VA_ARGS__)
+#  define DASSERT(x, fmt, ...) ASSERT(val, fmt, ##__VA_ARGS__)
 #else
-#  define DASSERT(fmt, ...)     /* empty marco */
-#  define DVASSERT(x, fmt, ...) /* empty marco */
+#  define DASSERT(x, fmt, ...) /* empty marco */
 #endif
 
 
