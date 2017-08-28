@@ -2,9 +2,13 @@
 
 int main(void)
 {
-    SPEW("\n");
-    DSPEW("\n");
-    WARN("\n");
+    SPEW();
+    ERROR("Hi error %d", 345);
+    WARN();
+    NOTICE();
+    INFO();
+    DSPEW();
+    DSPEW();
 
     ASSERT(1);
     VASSERT(0, "test %d\n", 55);

@@ -4,12 +4,9 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <string.h>
+
+#define __IN_debug_c__
 #include "debug.h"
-
-#ifndef SPEW_FILE
-#define SPEW_FILE stdout
-#endif
-
 
 
 static void _vspew(const char *pre, const char *file,
@@ -20,7 +17,7 @@ static void _vspew(const char *pre, const char *file,
     vfprintf(SPEW_FILE, fmt, ap);
 }
 
-void _spew(const char *pre, const char *file,
+void xxx_spew(const char *pre, const char *file,
         int line, const char *func, const char *fmt, ...)
 {
     va_list ap;
@@ -29,7 +26,7 @@ void _spew(const char *pre, const char *file,
     va_end(ap);
 }
 
-void _assertAction()
+void xxx_assertAction()
 {
     pid_t pid;
     pid = getpid();
@@ -48,12 +45,12 @@ void _assertAction()
 static void segSaultCatcher(int sig)
 {
     ERROR("caught signal %d SIGSEGV\n", sig);
-    _assertAction();
+    xxx_assertAction();
 }
 
 // Add this to the start of your code so you may see where your code is
 // seg faulting.
-void _catchSigFault(void)
+void xxx_catchSigFault(void)
 {
     struct sigaction s;
     memset(&s, 0, sizeof(s));
