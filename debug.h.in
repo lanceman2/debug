@@ -52,10 +52,12 @@ extern "C" {
 
 
 // We change the exposed function name symbols with this
-// CPP option.
-#define xxx_spew           @DEBUG_SYMBOL_PREFIX@ ## _spew
-#define xxx_assertAction   @DEBUG_SYMBOL_PREFIX@ ## _assertAction
-#define xxx_catchSigFault  @DEBUG_SYMBOL_PREFIX@ ## _catchSigFault
+// CPP option.  The only exposed functions in debug.c
+// are xxx_spew, xxx_assertAction, and xxx_catchSigFault.
+//
+#define xxx_spew           @DEBUG_SYMBOL_PREFIX@ ## spew
+#define xxx_assertAction   @DEBUG_SYMBOL_PREFIX@ ## assertAction
+#define xxx_catchSigFault  @DEBUG_SYMBOL_PREFIX@ ## catchSigFault
 
 
 
@@ -138,12 +140,13 @@ extern void xxx_catchSigFault(void);
 #  endif
 #endif
 
+
 // Setting SPEW_LEVEL_ERROR is the least verbose level
 // SPEW() and ERROR() will both print at any level
 
 #ifndef SPEW_LEVEL_ERROR
 // We have no level SPEW_LEVEL_(DEBUG|INFO|NOTICE|WARN|ERROR)
-// so we set a 
+// so we set a default here:
 //#  define SPEW_LEVEL_DEBUG
 #  define SPEW_LEVEL_INFO
 #  define SPEW_LEVEL_NOTICE
@@ -155,9 +158,8 @@ extern void xxx_catchSigFault(void);
 #ifdef DEBUG
 #  define @MACRO_API_PREFIX@DASSERT(x, fmt, ...) ASSERT(val, fmt, ##__VA_ARGS__)
 #else
-#  define @MACRO_API_PREFIX@DASSERT(x, fmt, ...) /* empty marco */
+#  define @MACRO_API_PREFIX@DASSERT(x, fmt, ...) /*empty marco*/
 #endif
-
 
 #ifdef SPEW_LEVEL_WARN
 #  define @MACRO_API_PREFIX@WARN(fmt, ...) _SPEW("WARN: ", fmt, ##__VA_ARGS__)
