@@ -31,12 +31,12 @@ void xxx_assertAction()
     pid_t pid;
     pid = getpid();
 #ifdef ASSERT_ACTION_EXIT
-    ERROR("With exit due to error");
+    fprintf(SPEW_FILE, "Will exit due to error\n");
     exit(1); // atexit() calls are called
     // See `man 3 exit' and `man _exit'
 #else // ASSERT_ACTION_SLEEP
     int i = 1; // User debugger controller, unset to effect running code.
-    ERROR("Consider running: \n\n  gdb -pid %u\n\n  "
+    fprintf(SPEW_FILE, "  Consider running: \n\n  gdb -pid %u\n\n  "
         "pid=%u will now SLEEP ...\n", pid, pid);
     while(i) { sleep(1); }
 #endif
@@ -44,7 +44,7 @@ void xxx_assertAction()
 
 static void segSaultCatcher(int sig)
 {
-    ERROR("caught signal %d SIGSEGV\n", sig);
+    @MACRO_API_PREFIX@ERROR("caught signal %d SIGSEGV\n", sig);
     xxx_assertAction();
 }
 
@@ -56,5 +56,5 @@ void xxx_catchSigFault(void)
     memset(&s, 0, sizeof(s));
     s.sa_handler = segSaultCatcher;
     s.sa_flags = SA_RESETHAND;
-    ASSERT(0 == sigaction(SIGSEGV, &s, 0), "");
+    @MACRO_API_PREFIX@ASSERT(0 == sigaction(SIGSEGV, &s, 0), "");
 }

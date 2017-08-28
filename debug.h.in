@@ -51,10 +51,30 @@ extern "C" {
 #endif
 
 
-
+// We change the exposed function name symbols with this
+// CPP option.
 #define xxx_spew           @DEBUG_SYMBOL_PREFIX@ ## _spew
 #define xxx_assertAction   @DEBUG_SYMBOL_PREFIX@ ## _assertAction
 #define xxx_catchSigFault  @DEBUG_SYMBOL_PREFIX@ ## _catchSigFault
+
+
+
+// ENV_PREFIX is used just in compiling debug.c
+// to set environment variable name like
+// SDK_SPEW_LEVEL=warn
+// to effect which spew functions take action.
+//
+// The compile time switches:
+// SPEW_LEVEL_DEBUG, SPEW_LEVEL_INFO, SPEW_LEVEL_NOTICE,
+// SPEW_LEVEL_WARN, SPEW_LEVEL_ERROR
+// can remove *_SPEW_LEVEL environment variable
+// by removing MACRO function calls from the code.
+//
+#ifndef ENV_PREFIX
+//#  define ENV_PREFIX  "SDK_"
+#  define ENV_PREFIX  ""
+#endif
+
 
 
 extern void xxx_spew(const char *pre, const char *file,
@@ -71,14 +91,14 @@ extern void xxx_catchSigFault(void);
      xxx_spew(pre, __BASE_FILE__, __LINE__,\
         __func__, fmt SPEW_POST_STRING, ##__VA_ARGS__)
 
-#  define ERROR(fmt, ...)\
+#  define @MACRO_API_PREFIX@ERROR(fmt, ...)\
      _SPEW("ERROR: ", fmt, ##__VA_ARGS__)
 
 // SPEW is like ERROR but just called SPEW
-#  define SPEW(fmt, ...)\
+#  define @MACRO_API_PREFIX@SPEW(fmt, ...)\
      _SPEW("SPEW: ", fmt, ##__VA_ARGS__)
 
-#  define ASSERT(val, fmt, ...) \
+#  define @MACRO_API_PREFIX@ASSERT(val, fmt, ...) \
     do {\
         if(!((bool) val)) {\
             _SPEW("ASSERTION", "(%s) failed: " #fmt, #val, ##__VA_ARGS__);\
@@ -87,7 +107,7 @@ extern void xxx_catchSigFault(void);
     }\
     while(0)
 
-#  define FAIL(fmt, ...) \
+#  define @MACRO_API_PREFIX@FAIL(fmt, ...) \
     do {\
         _SPEW("FAIL: ", fmt, ##__VA_ARGS__);\
         xxx_assertAction();\
@@ -133,34 +153,34 @@ extern void xxx_catchSigFault(void);
 
 
 #ifdef DEBUG
-#  define DASSERT(x, fmt, ...) ASSERT(val, fmt, ##__VA_ARGS__)
+#  define @MACRO_API_PREFIX@DASSERT(x, fmt, ...) ASSERT(val, fmt, ##__VA_ARGS__)
 #else
-#  define DASSERT(x, fmt, ...) /* empty marco */
+#  define @MACRO_API_PREFIX@DASSERT(x, fmt, ...) /* empty marco */
 #endif
 
 
 #ifdef SPEW_LEVEL_WARN
-#  define WARN(fmt, ...) _SPEW("WARN: ", fmt, ##__VA_ARGS__)
+#  define @MACRO_API_PREFIX@WARN(fmt, ...) _SPEW("WARN: ", fmt, ##__VA_ARGS__)
 #else
-#  define WARN(fmt, ...) /*empty macro*/
+#  define @MACRO_API_PREFIX@WARN(fmt, ...) /*empty macro*/
 #endif 
 
 #ifdef SPEW_LEVEL_NOTICE
-#  define NOTICE(fmt, ...) _SPEW("NOTICE: ", fmt, ##__VA_ARGS__)
+#  define @MACRO_API_PREFIX@NOTICE(fmt, ...) _SPEW("NOTICE: ", fmt, ##__VA_ARGS__)
 #else
-#  define NOTICE(fmt, ...) /*empty macro*/
+#  define @MACRO_API_PREFIX@NOTICE(fmt, ...) /*empty macro*/
 #endif
 
 #ifdef SPEW_LEVEL_INFO
-#  define INFO(fmt, ...)   _SPEW("INFO: ", fmt, ##__VA_ARGS__)
+#  define @MACRO_API_PREFIX@INFO(fmt, ...)   _SPEW("INFO: ", fmt, ##__VA_ARGS__)
 #else
-#  define INFO(fmt, ...) /*empty macro*/
+#  define @MACRO_API_PREFIX@INFO(fmt, ...) /*empty macro*/
 #endif
 
 #ifdef SPEW_LEVEL_DEBUG
-#  define DSPEW(fmt, ...)  _SPEW("DEBUG: ", fmt, ##__VA_ARGS__)
+#  define @MACRO_API_PREFIX@DSPEW(fmt, ...)  _SPEW("DEBUG: ", fmt, ##__VA_ARGS__)
 #else
-#  define DSPEW(fmt, ...) /*empty macro*/
+#  define @MACRO_API_PREFIX@DSPEW(fmt, ...) /*empty macro*/
 #endif
 
 
