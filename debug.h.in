@@ -119,7 +119,7 @@ extern void xxx_catchSigFault(void);
 ///////////////////////////////////////////////////////////////////////////
 
 
-#ifdef SPEW_LEVEL_DEBUG
+#ifdef SPEW_LEVEL_DEBUG // The highest verbosity
 #  ifndef SPEW_LEVEL_INFO
 #    define SPEW_LEVEL_INFO
 #  endif
@@ -143,6 +143,7 @@ extern void xxx_catchSigFault(void);
 
 // Setting SPEW_LEVEL_ERROR is the least verbose level
 // SPEW() and ERROR() will both print at any level
+//
 
 #ifndef SPEW_LEVEL_ERROR
 // We have no level SPEW_LEVEL_(DEBUG|INFO|NOTICE|WARN|ERROR)
@@ -151,7 +152,6 @@ extern void xxx_catchSigFault(void);
 #  define SPEW_LEVEL_INFO
 #  define SPEW_LEVEL_NOTICE
 #  define SPEW_LEVEL_WARN
-#  define SPEW_LEVEL_ERROR
 #endif
 
 
