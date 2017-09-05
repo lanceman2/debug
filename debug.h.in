@@ -102,7 +102,7 @@ extern void xxx_catchSigFault(void);
 
 #  define @MACRO_API_PREFIX@ASSERT(val, fmt, ...) \
     do {\
-        if(!((bool) val)) {\
+        if(!((bool) (val))) {\
             _SPEW("ASSERTION", "(%s) failed: " #fmt, #val, ##__VA_ARGS__);\
             xxx_assertAction();\
         }\
