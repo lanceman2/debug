@@ -8,6 +8,7 @@
 #include <sys/syscall.h>
 #include <pthread.h>
 #include <stdatomic.h>
+#include <ctype.h>
 
 ///////////////////////////////////////////////////////////////////////
 // CONFIGURATION
@@ -160,7 +161,8 @@ static void vspew(FILE *stream, int errn, const char *pre, const char *file,
     }
 
     if(isColor)
-        len += snprintf(&buffer[len], BUFLEN, "\033[%s;1m", ttyColors[level]);
+        // https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
+        len += snprintf(&buffer[len], BUFLEN, "\033[%s;1;7m", ttyColors[level]);
 #ifdef USER_PREFIX
     len += snprintf(&buffer[len], BUFLEN, "%s", USER_PREFIX);
 #endif
@@ -244,11 +246,13 @@ void spew(uint32_t levelIn, FILE *stream, int errn,
 {
 
 #ifdef SPEW_LEVEL_ENV
-    // TODO: Maybe do this just the first call.
+    // TODO: Maybe do this just the first spew() call.
     //
     char *env = getenv(SPEW_LEVEL_ENV);
     if(env && env[0]) {
-        const char val = env[0];
+        char val = env[0];
+        // Remove proceeding spaces:
+        while(*env && isspace(val)) val = *env++;
         if(val <= '9') {
             if(val < '0')
                 spewLevel = 0;
@@ -286,17 +290,21 @@ void spew(uint32_t levelIn, FILE *stream, int errn,
 #endif
 
 #ifdef SPEW_COLOR_ENV
-    // TODO: Maybe do this just the first call.
+    // TODO: Maybe do this just the first spew() call.
     //
 #  ifndef SPEW_LEVEL_ENV
     // Declare env just once:
     char *
 #  endif
     env = getenv(SPEW_COLOR_ENV);
-    if(env && env[0]) {
-        const char val = env[0];
+    if(env && *env) {
+        char val = *env++;
+        // Remove proceeding spaces:
+        while(*env && isspace(val)) val = *env++;
         if(val <= '0')
             color = 0;
+        else if(val >= '2' && val <= '9')
+            color = 2;
         else
             switch(val) {
                 case 'A': // Automatic
@@ -307,11 +315,13 @@ void spew(uint32_t levelIn, FILE *stream, int errn,
                 case 'y': // yes
                 case 'T': // True
                 case 't': // true
+                case '1': // 1
                      color = 1;
                     break;
                 case 'O': // On or Off
                 case 'o': // on or off
-                    switch(env[1]) {
+                    val = *env++; // val == '\0' is fine too.
+                    switch(val) {
                         case 'N': // ON or oN
                         case 'n': // on or On
                             color = 1;
