@@ -15,7 +15,7 @@
 ///////////////////////////////////////////////////////////////////////
 //
 // Add USER_PREFIX string to the start of the spew.
-// Example: if USER_PREFIX is "QS"  QS_ERROR will be printed in place of
+// Example: if USER_PREFIX is "QS_"  QS_ERROR will be printed in place of
 // ERROR for a call to ERROR("...").  Leave unset if no prefix is
 // wanted.
 //#define USER_PREFIX  ""
@@ -29,16 +29,20 @@
 //
 // If you want the USER_PREFIX added you need to do that explicitly
 // here.
-//
+
+#ifndef SPEW_LEVEL_ENV
 // Comment this line out to not use at compile time or to set using a
 // compiler command line option like:
 // -DSPEW_LEVEL_ENV=SPEW_LEVEL
-#define SPEW_LEVEL_ENV "SPEW_LEVEL"
-//
+#  define SPEW_LEVEL_ENV "SPEW_LEVEL"
+#endif
+
+#ifndef SPEW_COLOR_ENV
 // Comment this line out to not use at compile time or to set using a
 // compiler command line option like:
 // -DSPEW_COLOR_ENV=SPEW_COLOR
-#define SPEW_COLOR_ENV "SPEW_COLOR"
+#  define SPEW_COLOR_ENV "SPEW_COLOR"
+#endif
 //
 //
 // Default to turn on ANSI escape sequences.  Example: prints red ERROR
