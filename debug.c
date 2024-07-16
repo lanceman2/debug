@@ -30,10 +30,14 @@
 // If you want the USER_PREFIX added you need to do that explicitly
 // here.
 //
-// Comment this line out to not use at compile time.
+// Comment this line out to not use at compile time or to set using a
+// compiler command line option like:
+// -DSPEW_LEVEL_ENV=SPEW_LEVEL
 #define SPEW_LEVEL_ENV "SPEW_LEVEL"
 //
-// Comment this line out to not use at compile time.
+// Comment this line out to not use at compile time or to set using a
+// compiler command line option like:
+// -DSPEW_COLOR_ENV=SPEW_COLOR
 #define SPEW_COLOR_ENV "SPEW_COLOR"
 //
 //
