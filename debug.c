@@ -42,7 +42,7 @@
 //
 //
 // Default to turn on ANSI escape sequences.  Example: prints red ERROR
-// prefix with color on.
+// prefix with color on for a call to ERROR("my error");
 //
 //  0 = off, 1 = on, 2 = auto
 static uint32_t color = 2;
