@@ -47,7 +47,7 @@ static uint32_t color = 2;
 //
 const static char *ttyColors[] = { 
 //      level:      0    1     2      3      4     5
-//                  n/a  red   yellow green  blue  none/white
+//                  n/a  red   yellow green  blue  none
 //                  NONE ERROR WARN   NOTICE INFO  DEBUG
                     "0", "31", "93",  "32",  "34", "0" };
 
