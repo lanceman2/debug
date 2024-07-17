@@ -365,7 +365,7 @@ void (*assertAction)(FILE *stream, const char *file,
 
 
 
-void assert(FILE *stream, const char *file,
+void _assert(FILE *stream, const char *file,
         int lineNum, const char *func)
 {
     pid_t pid;
