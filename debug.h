@@ -50,7 +50,7 @@ you watch your code run.
 #include <stdbool.h>
 #include <stdio.h>
 #include <errno.h>
-
+#include <stdint.h>
 
 #ifndef EXPORT
 #  define EXPORT extern
