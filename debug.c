@@ -53,7 +53,7 @@ static uint32_t color = 2;
 
 // https://en.wikipedia.org/wiki/ANSI_escape_code
 //
-const static char *ttyColors[] = { 
+static const char *ttyColors[] = { 
 //      level:      0    1     2      3      4     5
 //                  n/a  red   yellow green  blue  none
 //                  NONE ERROR WARN   NOTICE INFO  DEBUG
