@@ -118,7 +118,7 @@ static const char *ttyColors[] = {
 // We need spewLevel to be thread safe so we make spewLevel atomic.  Note
 // we only set it once and get it once in this file and it's not exposed
 // to any other code.
-static atomic_int spewLevel = COMPILED_SPEW_LEVEL;
+static atomic_uint spewLevel = COMPILED_SPEW_LEVEL;
 
 
 int getCompiledSpewLevel(void) {
@@ -162,9 +162,11 @@ static void vspew(FILE *stream, int errn, const char *pre, const char *file,
     switch(color) {
         case 1:
             isColor = true;
+            break;
         case 2:
             if(color >= 2 && stream && isatty(fileno(stream)))
                 isColor = true;
+            break;
         default:
     }
 
