@@ -181,28 +181,27 @@ static void vspew(FILE *stream, int errn, const char *pre, const char *file,
     if(isColor)
         len += snprintf(&buffer[len], BUFLEN, "\033[0m");
 
-    if(errn)
-    {
-        // TODO: GTK+3 keeps setting errno and I'm sick of seeing it.
-        errno = 0;
-        char estr[128];
-        strerror_r(errn, estr, 128);
+    if(errn) {
+
+        // TODO: Looks like strerror_r(3) is broken on my system,
+        // sys_errlist(3) is deprecated, and strerror(3) is not thread
+        // safe.  I'm fucked, there is no easy thread safe way to get the
+        // system error string.
+
         // TODO: very Linux specific code here:
         len += snprintf(&buffer[len], BUFLEN,
                 " %s:%d:pid=%u:%zu %s():errno=%d:%s: ",
                 file, line,
                 getpid(), syscall(SYS_gettid), func,
-                errn, estr);
+                errn, strerror(errn) /* How the fuck can they make this
+                                        not thread safe */);
     } else
         len += snprintf(&buffer[len], BUFLEN, " %s:%d:pid=%u:%zu %s(): ",
                 file, line,
                 getpid(), syscall(SYS_gettid), func);
 
 
-
-
-    if(len < 10 || len > BUFLEN - 40)
-    {
+    if(len < 10 || len > BUFLEN - 40) {
         //
         // This should not happen.
 
@@ -211,12 +210,10 @@ static void vspew(FILE *stream, int errn, const char *pre, const char *file,
         //
         if(stream) {
             if(errn) {
-                char estr[128];
-                strerror_r(errn, estr, 128);
                 fprintf(stream, "%s%s:%d:pid=%u:%zu %s():errno=%d:%s: ",
                     pre, file, line,
                     getpid(), syscall(SYS_gettid), func,
-                    errn, estr);
+                    errn, strerror(errn));
             } else
                 fprintf(stream, "%s%s:%d:pid=%u:%zu %s(): ",
                         pre, file, line,
