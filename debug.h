@@ -7,6 +7,7 @@
    in the file that includes this debug.h:
  
    DEBUG             -->  DASSERT()
+   DEBUG             -->  DZMEM()
 
    SPEW_LEVEL_DEBUG  -->  DSPEW() INFO() NOTICE() WARN() ERROR()
    SPEW_LEVEL_INFO   -->  INFO() NOTICE() WARN() ERROR()
@@ -16,7 +17,7 @@
 
    always on is      --> ASSERT() CHECK() RET_ERROR()
 
-   If a macro function is not live it becomes a empty macro with no code.
+   If a macro function is not live it becomes a empty macro with no C code.
 
 
 ///////////////////////////////////////////////////////////////////////////
